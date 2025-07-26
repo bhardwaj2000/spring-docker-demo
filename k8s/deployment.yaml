@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app
+  name: spring-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-app
+      app: spring-app
   template:
     metadata:
       labels:
-        app: demo-app
+        app: spring-app
     spec:
       containers:
-        - name: demo-app
-          image: us-central1-docker.pkg.dev/YOUR_PROJECT_ID/demo-repo/demo-app:latest
+        - name: spring-container
+          image: us-central1-docker.pkg.dev/infytel-419119/demo-repo/spring-docker-demo:latest
           ports:
             - containerPort: 8080

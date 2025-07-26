@@ -1,22 +1,19 @@
 steps:
-  - name: 'gcr.io/cloud-builders/mvn'
-    args: ['clean', 'package']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/infytel-419119/demo-repo/spring-docker-demo:$SHORT_SHA', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/demo-repo/demo-app:$COMMIT_SHA', '.']
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/demo-repo/demo-app:$COMMIT_SHA']
+    args: ['push', 'us-central1-docker.pkg.dev/infytel-419119/demo-repo/spring-docker-demo:$SHORT_SHA']
 
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'set'
       - 'image'
-      - 'deployment/demo-app'
-      - 'demo-app=us-central1-docker.pkg.dev/$PROJECT_ID/demo-repo/demo-app:$COMMIT_SHA'
+      - 'deployment/spring-deployment'
+      - 'spring-container=us-central1-docker.pkg.dev/infytel-419119/demo-repo/spring-docker-demo:$SHORT_SHA'
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=demo-cluster'
 
 images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/demo-repo/demo-app:$COMMIT_SHA'
+  - 'us-central1-docker.pkg.dev/infytel-419119/demo-repo/spring-docker-demo:$SHORT_SHA'
